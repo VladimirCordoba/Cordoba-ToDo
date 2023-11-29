@@ -18,9 +18,9 @@ public class TodoMessageController {
 
 
 @PostMapping()
-    public String  addPost( @RequestParam Post task){
+    public Object  addPost( @RequestParam Post task){
         posts.add(task);
-        return "message2";
+      return task;
 }
     @GetMapping(path = "message")
     public List<Post> taskMessage() {
