@@ -27,10 +27,7 @@ public class TodoMessageController {
 
     return posts;
     }
-    @GetMapping(path = "message2")
-    public String index2(){
-        return "index";
-    }
+
 
 
 }
