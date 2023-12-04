@@ -17,12 +17,12 @@ public class TodoMessageController {
     */
 
 
-@PostMapping()
+@PostMapping("/task/create")
     public Object  addPost( @RequestParam Post task){
         posts.add(task);
-      return task;
+      return posts;
 }
-    @GetMapping(path = "message")
+    @GetMapping(path = "task")
     public List<Post> taskMessage() {
 
     return posts;
