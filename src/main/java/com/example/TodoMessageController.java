@@ -8,7 +8,7 @@ import java.util.*;
 @RestController
 @RequestMapping
 public class TodoMessageController {
-    private final static List<Post> posts = new ArrayList<>();
+    private final static List<String > posts = new ArrayList<>();
 
    /* @GetMapping(path = "message")
     public List<String> taskMessage() {
@@ -17,16 +17,32 @@ public class TodoMessageController {
     */
 
 
-@PostMapping("/task/create")
-    public Object  addPost( @RequestParam Post task){
-        posts.add(task);
-      return posts;
+/*@PostMapping("/task/create")
+    public Object  addPost( @RequestParam Post task1, @RequestBody String text){
+        posts.put(task1, text);
+      return ("/index");
 }
     @GetMapping(path = "task")
-    public List<Post> taskMessage() {
+    public Map<Post, String> taskMessage() {
+
+    return posts;
+    }*/
+@PostMapping("/task/create")
+    public Object  addPost(@RequestBody String text){
+        posts.add(text);
+      return ("/index");
+}
+    @GetMapping(path = "task")
+    public List<String> taskMessage() {
 
     return posts;
     }
+
+
+
+
+
+
 
 
 

@@ -7,13 +7,31 @@
 <body>
 
 <div>
-    <form method="post" action="/task/create">
-        <input type="text" name="task" placeholder="Введите сообщение"/>
+    <form method="POST" action="/task/create" >
+        <input type="text" name="task1" placeholder="Введите сообщение"/>
         <button type="submit">Добавить новый ТАСК</button>
    </form>
 </div>
 
+<div>
+    <form action='demo_form.asp'>
+        Имя: <input type="text" name="fname"><br>
+        Фамилия: <input type="text" name="lname"><br>
+        <input type="submit" value="Отправить">
+    </form>
+
+</div>
+
+
+
+
+<!--name="task1"-->
 
     <p>Получить список ТАСКОВ <a href="/task">here</a></p>
+
+
+
+
+
 </body>
 </html>

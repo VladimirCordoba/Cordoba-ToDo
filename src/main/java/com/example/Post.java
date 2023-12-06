@@ -1,4 +1,4 @@
 package com.example;
 
-public record Post(String task) {
+public record Post(String task3) {
 }
