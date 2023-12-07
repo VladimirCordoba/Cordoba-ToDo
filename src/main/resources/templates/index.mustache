@@ -6,19 +6,36 @@
 </head>
 <body>
 
-<div>
+<!--<div>
     <form method="POST" action="/task/create" >
         <input type="text" name="task1" placeholder="Введите сообщение"/>
         <button type="submit">Добавить новый ТАСК</button>
    </form>
-</div>
+</div>-->
 
 <div>
-    <form action='demo_form.asp'>
-        Имя: <input type="text" name="fname"><br>
-        Фамилия: <input type="text" name="lname"><br>
+    <form method="POST" action="/task/create" >
+        ТАСК: <input type="text" name="task1"><br>
+        Статус: <input type="text" name="status"><br>
         <input type="submit" value="Отправить">
     </form>
+<div>
++
+    +
+
+ <!--   //тут мы будем ненять ключ - таск выполнен-->
++
+    +
+
+</div>
+    <form method="POST" action="/closeTask" >
+        ТАСК: <input type="text" name="task1"><br>
+       <!-- Статус: <input type="text" name="status"><br>-->
+        <input type="submit" value="Отправить">
+    </form>
+
+
+
 
 </div>
 
