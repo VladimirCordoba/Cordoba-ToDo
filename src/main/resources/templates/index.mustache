@@ -6,6 +6,9 @@
 </head>
 <body>
 
+
+
+
 <!--<div>
     <form method="POST" action="/task/create" >
         <input type="text" name="task1" placeholder="Введите сообщение"/>
@@ -15,39 +18,35 @@
 
 <div>
     <form method="POST" action="/task/create" >
-        ТАСК: <input type="text" name="task1"><br>
-        Статус: <input type="text" name="status"><br>
+        id : <input type="number" name="id"><br>
+        ТАСК: <input type="text" name="tMessage"><br>
+        STATUS(OPEN; CLOSED): <input type="text" name="status"><br>
         <input type="submit" value="Отправить">
     </form>
-<div>
-+
-    +
 
+    <br>
  <!--   //тут мы будем ненять ключ - таск выполнен-->
-+
-    +
+    <br>
 
-</div>
     <form method="POST" action="/closeTask" >
-        ТАСК: <input type="text" name="task1"><br>
-       <!-- Статус: <input type="text" name="status"><br>-->
+        Изменить Статус: <input type="text" name="status"><br>
+       <!-- Статус: <input type="text" name="status">-->
         <input type="submit" value="Отправить">
     </form>
 
-
-
-
 </div>
 
-
-
-
-<!--name="task1"-->
 
     <p>Получить список ТАСКОВ <a href="/task">here</a></p>
 
 
-
+<div>
+<ul>
+    {{#spisokTaskov}}
+        <li>{{id}} : {{tMessage}}:{{status}}</li>
+    {{/spisokTaskov}}
+</ul>
+</div>
 
 
 </body>

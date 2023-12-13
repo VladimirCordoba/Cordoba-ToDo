@@ -1,4 +1,4 @@
-package com.example;
+package com.example.CONTROLLERS;
 
 
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+//@Controller
 public class HelloController {
 
     @GetMapping("/hello")
@@ -25,8 +25,13 @@ public class HelloController {
     }
     @GetMapping("index")
     public String index1() {
-
         return "index";
     }
+
+    @GetMapping("result")
+    public String result1() {
+        return "result";
+    }
+
 }
 
