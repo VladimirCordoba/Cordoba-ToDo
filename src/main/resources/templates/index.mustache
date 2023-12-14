@@ -4,17 +4,7 @@
     <meta charset="UTF-8">
     <title>Best-todo</title>
 </head>
-<body>
-
-
-
-
-<!--<div>
-    <form method="POST" action="/task/create" >
-        <input type="text" name="task1" placeholder="Введите сообщение"/>
-        <button type="submit">Добавить новый ТАСК</button>
-   </form>
-</div>-->
+        <body>
 
 <div>
     <form method="POST" action="/task/create" >
@@ -29,25 +19,28 @@
     <br>
 
     <form method="POST" action="/closeTask" >
-        Изменить Статус: <input type="text" name="status"><br>
+        Изменить Статус. Введите ID: <input type="number" name="id"><br>
        <!-- Статус: <input type="text" name="status">-->
         <input type="submit" value="Отправить">
     </form>
 
 </div>
 
-
     <p>Получить список ТАСКОВ <a href="/task">here</a></p>
 
-
-<div>
-<ul>
+    <div>
+        <ul>
     {{#spisokTaskov}}
-        <li>{{id}} : {{tMessage}}:{{status}}</li>
+       <!-- <li>ID = {{id}} : Таск = {{tMessage}}:Статус таска= {{status}}</li>-->
+      ****************************
+        <li>ID = {{id}} </li>
+        <li>Таск = {{tMessage}}</li>
+        <li>Статус таска= {{status}}</li>
+        <br>
+
     {{/spisokTaskov}}
-</ul>
-</div>
+        </ul>
+    </div>
 
-
-</body>
+        </body>
 </html>

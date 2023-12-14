@@ -1,118 +1,53 @@
 package com.example.CONTROLLERS;
 
-import com.example.Post;
 import com.example.TaskMessage;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.List;
 
+
+//@RestController этот контроллер возвращает JSON поэтому заменил его на просто контроллер тогда маппинг работает.
 @Controller
-//@RestController
 @RequestMapping
-
 public class TodoMessageController {
-
-    /*private final static Map<String, String> posts = new HashMap<>();*/
-    public TaskMessage[] massivTaskov = new TaskMessage[1];
-
     TaskMessage taskMessage;
-  //  String s;
+    List<TaskMessage> spisokTaskov = new ArrayList<>();
 
-   /* @GetMapping(path = "message")
-    public List<String> taskMessage() {
-        return List.of("Todo Message");
-    }
-    */
-
-
-/*@PostMapping("/task/create")
-    public Object  addPost( @RequestParam Post task1, @RequestBody String text){
-        posts.put(task1, text);
-      return ("/index");
-}
-    @GetMapping(path = "task")
-    public Map<Post, String> taskMessage() {
-
-    return posts;
-    }*/
-
+    //Создаем объекты тасков и добавляем их в список List
 @PostMapping("/task/create")
     public Object  addPost(
             @RequestParam Integer id, @RequestParam String tMessage, @RequestParam String status,
-            ModelMap model)
-
-{
-    taskMessage = new TaskMessage(id, tMessage, status);
-     massivTaskov[0] = taskMessage;
-
-    List<TaskMessage> spisokTaskov = new ArrayList<>();
-    spisokTaskov.add(taskMessage);
-
-    /*s=status;*/
-      /*  posts.put(task1, status);*/
-      /*return ("/index");*/
-   // return massivTaskov;
-  //  model.addAttribute("taskMessage", taskMessage);
- //   return massivTaskov;
-    return "result";
-    }
-
-
-
-    //тут мы будем ненять ключ - таск выполнен
-
-    @PostMapping("/closeTask")
-    public String changeStatus(@RequestParam String status ) {
-
-        taskMessage.setStatus(status);
-        //     posts.put(task1, s);
-        massivTaskov[0] = taskMessage;
-
-        return ("index");
-       /* return massivTaskov;*/
-
-    }
-/*
-    @GetMapping(path = "task")
-    public String taskMessage(Map<String, Object> model) {
-model.put ("some", massivTaskov);
+            Model model)
+        {
+            taskMessage = new TaskMessage(id, tMessage, status);
+            spisokTaskov.add(taskMessage);
         return "index";
-    }*/
+         }
 
+ //тут мы будем ненять ключ - таск выполнен
+    @PostMapping("/closeTask")
+    public String changeStatus(@RequestParam Integer id, Map<String, Object> model) {
 
-   /* @GetMapping(path = "task")
-    public String convertWithStream() {
-        String mapAsString = posts.keySet().stream()
-                .map(key -> key + ":" + posts.get(key))
-                .collect(Collectors.joining(", ", "{", "}"));
-        return mapAsString;
-    }*/
+        Iterator<TaskMessage>  iterator = spisokTaskov.iterator();
+            while(iterator.hasNext())
+            {
+                TaskMessage tasks = iterator.next();
+                if( (int)tasks.getId() == id)
+                {
+                tasks.setStatus("x");
+                }
+            }
+              model.put("spisokTaskov", spisokTaskov);
+        return ("index");
 
-
-
-
+    }
+    // Выводим на экран список тасков
     @GetMapping("task")
-    public String taskMessage(Model model) {
-      List<TaskMessage> spisokTaskov = new ArrayList<>();
-        spisokTaskov.add(taskMessage);
-        model.addAttribute("spisokTaskov",  spisokTaskov);
+    public String taskMessage(Map<String, Object> model) {
+            model.put("spisokTaskov", spisokTaskov);
     return "index";
     }
-
-   /* @GetMapping(path = "task")
-    public TaskMessage[] taskMessage() {
-
-        return massivTaskov;
-      //  return Arrays.toString(massivTaskov);
-
-    }*/
-
-
 
 }
