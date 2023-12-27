@@ -24,11 +24,32 @@
         <input type="submit" value="Отправить">
     </form>
 
-</div>
+    </div>
 
     <p>Получить список ТАСКОВ <a href="/task">here</a></p>
+    <p>Добавить данные в Базу   <a href="/baza">here</a></p>
+<br>
+<!--   //тут мы будем добавлять даные в базу методом ПОСТ-->
+<br>
+<form method="POST" action="/adToDb" >
+    Добавить запись в базу: <input type="text" name="dbquery"><br>
+    <!-- Статус: <input type="text" name="status">-->
+    <input type="submit" value="Отправить">
+</form>
+
+<br>
+<!--   //тут мы будем ПОЛУЧАТЬ ДННЫЕ из базы -->
+<br>
+
+<form method="POST" action="/getDataFromDb" >
+    Получить данные из базы введите SQL запрос: <input type="text" name="dbGetData"><br>
+    <!-- Статус: <input type="text" name="status">-->
+    <input type="submit" value="Отправить">
+</form>
 
     <div>
+
+<!--Тут мы выводим на экран список тасков из Листа-->
         <ul>
     {{#spisokTaskov}}
        <!-- <li>ID = {{id}} : Таск = {{tMessage}}:Статус таска= {{status}}</li>-->
@@ -40,6 +61,19 @@
 
     {{/spisokTaskov}}
         </ul>
+        <!--Тут мы выводим на экран список тасков из БАЗЫ-->
+        <ul>
+            {{#spisokTaskov}}
+
+                ****************************
+                <li>ID = {{id}} </li>
+                <li>Таск = {{tMessage}}</li>
+                <li>Статус таска= {{status}}</li>
+                <br>
+
+            {{/spisokTaskov}}
+        </ul>
+
     </div>
 
         </body>
