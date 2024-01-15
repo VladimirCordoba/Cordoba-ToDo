@@ -15,7 +15,7 @@
     </form>
 
     <br>
- <!--   //тут мы будем ненять ключ - таск выполнен-->
+ <!--   //тут мы будем ненять ключ - таск выполнен  в Листе List-->
     <br>
 
     <form method="POST" action="/closeTask" >
@@ -48,6 +48,17 @@
 </form>
 
     <div>
+<div>
+<!--   //тут мы будем ненять ключ - таск выполнен  в Базе -->
+    <br>
+
+    <form method="POST" action="/closeTaskInDB" >
+        Изменить Статус в Базе. Введите ID: <input type="number" name="id"><br>
+       <!-- Статус: <input type="text" name="status">-->
+        <input type="submit" value="Отправить">
+    </form>
+
+</div>
 
 <!--Тут мы выводим на экран список тасков из Листа-->
         <ul>
@@ -63,18 +74,21 @@
         </ul>
         <!--Тут мы выводим на экран список тасков из БАЗЫ-->
         <ul>
-            {{#spisokTaskov}}
+            {{#listTaskov}}
 
                 ****************************
                 <li>ID = {{id}} </li>
-                <li>Таск = {{tMessage}}</li>
+                <li>Таск = {{task}}</li>
                 <li>Статус таска= {{status}}</li>
                 <br>
 
-            {{/spisokTaskov}}
+            {{/listTaskov}}
         </ul>
 
     </div>
+
+
+
 
         </body>
 </html>

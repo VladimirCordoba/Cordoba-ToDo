@@ -44,7 +44,7 @@ public class TodoMessageController {
 
     }
 
-    // Выводим на экран список тасков
+    // Выводим на экран список тасков из Листа
     @GetMapping("task")
     public String taskMessage(Map<String, Object> model) {
             model.put("spisokTaskov", spisokTaskov);
