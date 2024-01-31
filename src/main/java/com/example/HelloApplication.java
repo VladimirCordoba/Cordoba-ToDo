@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+//@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication
 
 public class HelloApplication {
 
