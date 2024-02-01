@@ -36,4 +36,18 @@ public class Tasks {
     public void setTask(String task) {
         this.task = task;
     }
+
+    public Tasks() {
+    }
+
+    public Tasks(String status, String task) {
+        this.status = status;
+        this.task = task;
+    }
+
+    public Tasks(Long id, String status, String task) {
+        this.id = id;
+        this.status = status;
+        this.task = task;
+    }
 }

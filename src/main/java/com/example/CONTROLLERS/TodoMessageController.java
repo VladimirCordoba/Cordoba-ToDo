@@ -16,7 +16,7 @@ public class TodoMessageController {
     List<TaskMessage> spisokTaskov = new ArrayList<>();
 
     //Создаем объекты тасков и добавляем их в список List
-@PostMapping("/task/create")
+/*@PostMapping("/task/create")
     public Object  addPost(
             @RequestParam Integer id, @RequestParam String tMessage, @RequestParam String status,
             Model model)
@@ -24,7 +24,7 @@ public class TodoMessageController {
             taskMessage = new TaskMessage(id, tMessage, status);
             spisokTaskov.add(taskMessage);
         return "index";
-         }
+         }*/
 
  //тут мы будем ненять ключ - таск выполнен
     @PostMapping("/closeTask")
