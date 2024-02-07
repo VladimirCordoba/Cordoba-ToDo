@@ -8,21 +8,31 @@
 
 
 <!--Тут мы выводим на экран список тасков из НОВОЙ БАЗЫ-->
+<div contentEditable="true">
 <ul>
     {{#listOfTasks}}
 
         ****************************
-        <li>ID = {{id}} </li>
-        <li>Таск = {{task}}</li>
+        <li>Task ID = {{id}} </li>
+        <li>{{task}}</li> <br>
         <li>Статус таска= {{status}}</li>
         <br>
 
     {{/listOfTasks}}
 </ul>
-
-
+</div>
+<style>
+div {
+color:green;
+display: inline-block;
+border: solid 1px #000;
+min-height: 100px;
+width: 400px;
+}
+</style>
 <!--<p>Получить список всех тасков<a href="/task">here</a></p>-->
-
+<br>
+<br>
 <br>
 <form method="POST" action="/task/statusToX" >
     Изменить статус ТАСКА на "ВЫПОЛНЕН". Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">

@@ -1,9 +1,10 @@
 package com.example.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.Status;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
+import jakarta.persistence.*;
+
+import static com.example.Status.OPEN;
 
 @Entity
 public class Tasks {
@@ -11,7 +12,24 @@ public class Tasks {
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
-    private String status; String task;
+   private  Status status;
+
+
+   private String task;
+
+    public Tasks(Long id, Status status, String task) {
+        this.id = id;
+        this.status = status;
+        this.task = task;
+    }
+
+    public Tasks(Status status, String task) {
+        this.status = status;
+        this.task = task;
+    }
+
+    public Tasks() {
+    }
 
     public Long getId() {
         return id;
@@ -21,11 +39,11 @@ public class Tasks {
         this.id = id;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -34,20 +52,6 @@ public class Tasks {
     }
 
     public void setTask(String task) {
-        this.task = task;
-    }
-
-    public Tasks() {
-    }
-
-    public Tasks(String status, String task) {
-        this.status = status;
-        this.task = task;
-    }
-
-    public Tasks(Long id, String status, String task) {
-        this.id = id;
-        this.status = status;
         this.task = task;
     }
 }

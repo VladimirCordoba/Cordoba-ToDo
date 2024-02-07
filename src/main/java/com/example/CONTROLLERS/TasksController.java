@@ -1,5 +1,6 @@
 package com.example.CONTROLLERS;
 
+import com.example.Status;
 import com.example.models.Tasks;
 import com.example.repo.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class TasksController {
     }
 
     @PostMapping("/task/create")
-    public Object addTasks(@RequestParam String task, @RequestParam String status, Model model) {
-      Tasks  tasks = new Tasks(status, task);
+    public Object addTasks(@RequestParam String task, Model model) {
+      Tasks  tasks = new Tasks(Status.OPEN, task);
+    //  tasks.setStatus(Status.OPEN);
         tasksRepository.save(tasks);
 
         Iterable<Tasks> tasks1 = tasksRepository.findAll();
@@ -49,7 +51,7 @@ public class TasksController {
             return"result";
         }
         Tasks task = tasksRepository.findById(id).orElseThrow();
-        task.setStatus("X");
+        task.setStatus(Status.CLOSED);
          tasksRepository.save(task);
         // model.addAttribute("listOfTasks", tasks);
         Iterable<Tasks> tasks1 = tasksRepository.findAll();
@@ -84,7 +86,7 @@ public class TasksController {
         return "taskEdit";
     }
     @PostMapping("/task/{id}/update")
-    public Object updateTasks(@PathVariable (value="id") long id, @RequestParam String task, String status, Model model) {
+    public Object updateTasks(@PathVariable (value="id") long id, @RequestParam String task, Status status, Model model) {
         if(!tasksRepository.existsById(id)){
             return"result";
         }
