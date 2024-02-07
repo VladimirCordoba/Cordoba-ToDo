@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.Priority;
 import com.example.Status;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import jakarta.persistence.*;
@@ -14,18 +15,28 @@ public class Tasks {
 
    private  Status status;
 
-
    private String task;
+   private Priority priority;
 
-    public Tasks(Long id, Status status, String task) {
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Tasks(Long id, Status status, String task, Priority priority) {
         this.id = id;
         this.status = status;
         this.task = task;
+        this.priority = priority;
     }
 
-    public Tasks(Status status, String task) {
+    public Tasks(Status status, String task, Priority priority) {
         this.status = status;
         this.task = task;
+        this.priority = priority;
     }
 
     public Tasks() {
@@ -54,4 +65,5 @@ public class Tasks {
     public void setTask(String task) {
         this.task = task;
     }
+
 }

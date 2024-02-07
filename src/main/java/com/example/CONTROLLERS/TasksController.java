@@ -1,5 +1,6 @@
 package com.example.CONTROLLERS;
 
+import com.example.Priority;
 import com.example.Status;
 import com.example.models.Tasks;
 import com.example.repo.TasksRepository;
@@ -9,7 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class TasksController {
@@ -25,7 +30,7 @@ public class TasksController {
 
     @PostMapping("/task/create")
     public Object addTasks(@RequestParam String task, Model model) {
-      Tasks  tasks = new Tasks(Status.OPEN, task);
+      Tasks  tasks = new Tasks(Status.OPEN, task, Priority.LOW);
     //  tasks.setStatus(Status.OPEN);
         tasksRepository.save(tasks);
 
@@ -41,6 +46,7 @@ public class TasksController {
         tasksRepository.deleteById(id);
         // model.addAttribute("listOfTasks", tasks);
         Iterable<Tasks> tasks1 = tasksRepository.findAll();
+
         model.addAttribute("listOfTasks", tasks1);
         return "result";
     }
@@ -62,10 +68,17 @@ public class TasksController {
 
     @PostMapping("/task/list")
     public Object tasksAllTasksList1(Model model) {
+     ArrayList<Tasks> tasksList = new ArrayList<>();        //?
 
-
-        Iterable<Tasks> tasks1 = tasksRepository.findAll();
-        model.addAttribute("listOfTasks", tasks1);
+      //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
+               tasksRepository.findAll().forEach(tasksList::add);
+Comparator<Tasks> compareByPriority = Comparator.comparing(Tasks::getPriority );
+ArrayList<Tasks> sortedTasks =tasksList.stream().sorted(compareByPriority).collect(Collectors
+        .toCollection(ArrayList::new));
+       // tasksList.add((Tasks) tasks1);                                   //?
+       // model.addAttribute("listOfTasks", tasks1);
+       // model.addAttribute("listOfTasks", tasksList);
+        model.addAttribute("listOfTasks", sortedTasks);
 
         /*return "redirect:/result";*/
         return "result";
@@ -86,7 +99,7 @@ public class TasksController {
         return "taskEdit";
     }
     @PostMapping("/task/{id}/update")
-    public Object updateTasks(@PathVariable (value="id") long id, @RequestParam String task, Status status, Model model) {
+    public Object updateTasks(@PathVariable (value="id") long id, @RequestParam String task, Status status, Priority priority, Model model) {
         if(!tasksRepository.existsById(id)){
             return"result";
         }
@@ -94,6 +107,7 @@ public class TasksController {
         model.addAttribute("listOfTasks", tasks1);
         tasks1.setStatus(status);
         tasks1.setTask(task);
+        tasks1.setPriority(priority);
         tasksRepository.save(tasks1);
 
        // return "redirect:/taskEdit";
