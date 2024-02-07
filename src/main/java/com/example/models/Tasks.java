@@ -11,7 +11,7 @@ public class Tasks {
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
-    private String status, task;
+    private String status; String task;
 
     public Long getId() {
         return id;

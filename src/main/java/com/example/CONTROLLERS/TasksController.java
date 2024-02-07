@@ -3,33 +3,100 @@ package com.example.CONTROLLERS;
 import com.example.models.Tasks;
 import com.example.repo.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 public class TasksController {
     @Autowired
     private TasksRepository tasksRepository;
 
-    // @GetMapping("/tasks")
+
     @GetMapping
-    public String tasksList(Model model){
-        Iterable<Tasks> tasks = tasksRepository.findAll();
-        model.addAttribute("listOfTasks", tasks);
+    public String tasksList(Model model) {
+
         return "index";
     }
 
     @PostMapping("/task/create")
-    public Object  addTasks(@RequestParam String task, @RequestParam String status, Model model)
-        {
-            Tasks tasks = new Tasks(status, task);
-            tasksRepository.save(tasks);
-        return "redirect:/";
-         }
+    public Object addTasks(@RequestParam String task, @RequestParam String status, Model model) {
+      Tasks  tasks = new Tasks(status, task);
+        tasksRepository.save(tasks);
 
+        Iterable<Tasks> tasks1 = tasksRepository.findAll();
+        model.addAttribute("listOfTasks", tasks1);
+
+        /*return "redirect:/result";*/
+        return "result";
+    }
+
+    @PostMapping("/task/delate")
+    public String taskDelate(@RequestParam Long id, Model model) {
+        tasksRepository.deleteById(id);
+        // model.addAttribute("listOfTasks", tasks);
+        Iterable<Tasks> tasks1 = tasksRepository.findAll();
+        model.addAttribute("listOfTasks", tasks1);
+        return "result";
+    }
+
+    @PostMapping("/task/statusToX")
+    public String taskStatusToX(@RequestParam Long id, Model model) {
+        if(!tasksRepository.existsById(id)){
+            return"result";
+        }
+        Tasks task = tasksRepository.findById(id).orElseThrow();
+        task.setStatus("X");
+         tasksRepository.save(task);
+        // model.addAttribute("listOfTasks", tasks);
+        Iterable<Tasks> tasks1 = tasksRepository.findAll();
+        model.addAttribute("listOfTasks", tasks1);
+        return "result";
+
+    }
+
+    @PostMapping("/task/list")
+    public Object tasksAllTasksList1(Model model) {
+
+
+        Iterable<Tasks> tasks1 = tasksRepository.findAll();
+        model.addAttribute("listOfTasks", tasks1);
+
+        /*return "redirect:/result";*/
+        return "result";
+    }
+
+    @GetMapping("/task/edit")
+    public Object editTasks(@RequestParam Long id, Model model) {
+        if(!tasksRepository.existsById(id)){
+            return"result";
+        }
+       Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+        model.addAttribute("listOfTasks", tasks1);
+      // tasks1.setStatus("X");
+     //  tasks1.setTask(task);
+      // tasksRepository.save(tasks1);
+
+        //return "redirect:/taskEdit";
+        return "taskEdit";
+    }
+    @PostMapping("/task/{id}/update")
+    public Object updateTasks(@PathVariable (value="id") long id, @RequestParam String task, String status, Model model) {
+        if(!tasksRepository.existsById(id)){
+            return"result";
+        }
+        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+        model.addAttribute("listOfTasks", tasks1);
+        tasks1.setStatus(status);
+        tasks1.setTask(task);
+        tasksRepository.save(tasks1);
+
+       // return "redirect:/taskEdit";
+        return "taskEdit";
+    }
 
 
 }

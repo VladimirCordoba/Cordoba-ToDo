@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Best-todo</title>
+</head>
+<body>
+
+<div>
+    <ul>
+    {{#listOfTasks}}
+    <form method="POST" action="/task/{{id}}/update" >
+        <p>Task ID= {{id}}</p><br>
+        ТАСК: <textarea name="task" >{{task}}</textarea><br>
+        STATUS(OPEN; CLOSED): <input type="text" name="status" value={{status}}> </input><br><br>
+        <input type="submit" value="Сохранить изменения">
+    </form>
+    {{/listOfTasks}}
+    </ul>
+</div>
+<br>
+<div>
+    <form method="POST" action="/task/list" >
+        <input type="submit" value="Получить список всех тасков">
+    </form>
+</div>
+
+<style>
+label,
+textarea {
+font-size: 0.8rem;
+letter-spacing: 1px;
+}
+
+textarea {
+color:red;
+padding: 10px;
+max-width: 100%;
+line-height: 1.5;
+border-radius: 5px;
+border: 1px solid #ccc;
+box-shadow: 1px 1px 1px #999;
+}
+
+label
+</style>
+
+
+</body>
+</html>
+
+<!--
+<ul>
+    {{#listOfTasks}}
+
+        ****************************
+        <li>ID = {{id}} </li>
+        <li>Таск = {{task}}</li>
+        <li>Статус таска= {{status}}</li>
+        <br>
+
+    {{/listOfTasks}}
+</ul>-->

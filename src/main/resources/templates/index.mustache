@@ -15,72 +15,10 @@
     </form>
 </div>
 <br>
-
 <div>
-    <form  action="/" >
+    <form method="POST" action="/task/list" >
         <input type="submit" value="Получить список всех тасков">
     </form>
-
 </div>
-
-
-
-
-<!--<a href="/"> Получить список всех тасков</a>-->
-
-<br>
-    <form method="POST" action="/closeTaskInDB" >
-        Изменить статус ТАСКА на "ВЫПОЛНЕН". Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">
-
-    </form> <br>
-
-<form method="POST" action="/closeTaskInDB" >
-    Редактировать ТАСК. Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">
-
-</form> <br>
-
-
-
-
-<!--Тут мы выводим на экран список тасков из Листа-->
-        <ul>
-    {{#spisokTaskov}}
-       <!-- <li>ID = {{id}} : Таск = {{tMessage}}:Статус таска= {{status}}</li>-->
-      ****************************
-        <li>ID = {{id}} </li>
-        <li>Таск = {{tMessage}}</li>
-        <li>Статус таска= {{status}}</li>
-        <br>
-
-    {{/spisokTaskov}}
-        </ul>
-        <!--Тут мы выводим на экран список тасков из БАЗЫ-->
-        <ul>
-            {{#listTaskov}}
-
-                ****************************
-                <li>ID = {{id}} </li>
-                <li>Таск = {{task}}</li>
-                <li>Статус таска= {{status}}</li>
-                <br>
-
-            {{/listTaskov}}
-        </ul>
-
-        <!--Тут мы выводим на экран список тасков из НОВОЙ БАЗЫ-->
-        <ul>
-            {{#listOfTasks}}
-
-                ****************************
-                <li>ID = {{id}} </li>
-                <li>Таск = {{task}}</li>
-                <li>Статус таска= {{status}}</li>
-                <br>
-
-            {{/listOfTasks}}
-        </ul>
-
-    </div>
-
         </body>
 </html>

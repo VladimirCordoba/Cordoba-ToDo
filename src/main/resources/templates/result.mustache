@@ -1,14 +1,42 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="UTF-8">
+    <title>Best-todo</title>
 </head>
 <body>
 
-<div>
-    Привет
 
-</div>
+<!--Тут мы выводим на экран список тасков из НОВОЙ БАЗЫ-->
+<ul>
+    {{#listOfTasks}}
+
+        ****************************
+        <li>ID = {{id}} </li>
+        <li>Таск = {{task}}</li>
+        <li>Статус таска= {{status}}</li>
+        <br>
+
+    {{/listOfTasks}}
+</ul>
+
+
+<!--<p>Получить список всех тасков<a href="/task">here</a></p>-->
+
+<br>
+<form method="POST" action="/task/statusToX" >
+    Изменить статус ТАСКА на "ВЫПОЛНЕН". Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">
+
+</form> <br>
+
+<form method="GET" action="/task/edit" >
+    Редактировать ТАСК. Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">
+</form> <br>
+
+<form method="POST" action="/task/delate" >
+    УДАЛИТЬ ТАСК. Введите ID таска: <input type="number" name="id">  <input type="submit" value="Отправить">
+</form> <br>
+<p>Добавить новый ТАСК<a href="/">  here  </a></p>
 
 </body>
 </html>
