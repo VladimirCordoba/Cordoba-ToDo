@@ -1,5 +1,6 @@
 package com.example.CONTROLLERS;
 
+import com.example.ArrangedList;
 import com.example.Priority;
 import com.example.Status;
 import com.example.models.Tasks;
@@ -31,11 +32,12 @@ public class TasksController {
     @PostMapping("/task/create")
     public Object addTasks(@RequestParam String task, Model model) {
       Tasks  tasks = new Tasks(Status.OPEN, task, Priority.LOW);
-    //  tasks.setStatus(Status.OPEN);
-        tasksRepository.save(tasks);
+       tasksRepository.save(tasks);
 
-        Iterable<Tasks> tasks1 = tasksRepository.findAll();
-        model.addAttribute("listOfTasks", tasks1);
+      //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
+       // model.addAttribute("listOfTasks", tasks1);
+        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+
 
         /*return "redirect:/result";*/
         return "result";
@@ -45,9 +47,9 @@ public class TasksController {
     public String taskDelate(@RequestParam Long id, Model model) {
         tasksRepository.deleteById(id);
         // model.addAttribute("listOfTasks", tasks);
-        Iterable<Tasks> tasks1 = tasksRepository.findAll();
+       // Iterable<Tasks> tasks1 = tasksRepository.findAll();
 
-        model.addAttribute("listOfTasks", tasks1);
+        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
         return "result";
     }
 
@@ -60,25 +62,25 @@ public class TasksController {
         task.setStatus(Status.CLOSED);
          tasksRepository.save(task);
         // model.addAttribute("listOfTasks", tasks);
-        Iterable<Tasks> tasks1 = tasksRepository.findAll();
-        model.addAttribute("listOfTasks", tasks1);
+      //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
+        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
         return "result";
 
     }
 
-    @PostMapping("/task/list")
+    @PostMapping("/task/list")  // Тут получаем список всех тасеов из Базы
     public Object tasksAllTasksList1(Model model) {
-     ArrayList<Tasks> tasksList = new ArrayList<>();        //?
+    // ArrayList<Tasks> tasksList = new ArrayList<>();        //?
 
       //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
-               tasksRepository.findAll().forEach(tasksList::add);
-Comparator<Tasks> compareByPriority = Comparator.comparing(Tasks::getPriority );
-ArrayList<Tasks> sortedTasks =tasksList.stream().sorted(compareByPriority).collect(Collectors
-        .toCollection(ArrayList::new));
+           //    tasksRepository.findAll().forEach(tasksList::add);
+//Comparator<Tasks> compareByPriority = Comparator.comparing(Tasks::getPriority );
+//ArrayList<Tasks> sortedTasks =tasksList.stream().sorted(compareByPriority).collect(Collectors
+     //   .toCollection(ArrayList::new));
        // tasksList.add((Tasks) tasks1);                                   //?
        // model.addAttribute("listOfTasks", tasks1);
        // model.addAttribute("listOfTasks", tasksList);
-        model.addAttribute("listOfTasks", sortedTasks);
+        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
 
         /*return "redirect:/result";*/
         return "result";
