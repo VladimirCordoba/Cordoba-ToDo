@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public  class ArrangedList {
 
-    ArrayList<Tasks> tasksList = new ArrayList<>();
-    public ArrayList arrange(TasksRepository tasksRepository) {
+    public static ArrayList arrange(TasksRepository tasksRepository) {
+        ArrayList<Tasks> tasksList = new ArrayList<>();
       tasksRepository.findAll().forEach(tasksList::add);
         Comparator<Tasks> compareByPriority = Comparator.comparing(Tasks::getPriority );
         ArrayList<Tasks> sortedTasks =tasksList.stream().sorted(compareByPriority).collect(Collectors

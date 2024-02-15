@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public class TasksController {
     @Autowired
     private TasksRepository tasksRepository;
+ //  private ArrangedList arrangedList = new ArrangedList();
+
 
 
     @GetMapping
@@ -36,7 +38,8 @@ public class TasksController {
 
       //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
        // model.addAttribute("listOfTasks", tasks1);
-        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+       // model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+        model.addAttribute("listOfTasks", ArrangedList.arrange(tasksRepository));
 
 
         /*return "redirect:/result";*/
@@ -49,7 +52,7 @@ public class TasksController {
         // model.addAttribute("listOfTasks", tasks);
        // Iterable<Tasks> tasks1 = tasksRepository.findAll();
 
-        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+        model.addAttribute("listOfTasks", ArrangedList.arrange(tasksRepository));
         return "result";
     }
 
@@ -63,7 +66,7 @@ public class TasksController {
          tasksRepository.save(task);
         // model.addAttribute("listOfTasks", tasks);
       //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
-        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+        model.addAttribute("listOfTasks", ArrangedList.arrange(tasksRepository));
         return "result";
 
     }
@@ -80,7 +83,7 @@ public class TasksController {
        // tasksList.add((Tasks) tasks1);                                   //?
        // model.addAttribute("listOfTasks", tasks1);
        // model.addAttribute("listOfTasks", tasksList);
-        model.addAttribute("listOfTasks", new ArrangedList().arrange(tasksRepository));
+        model.addAttribute("listOfTasks", ArrangedList.arrange(tasksRepository));
 
         /*return "redirect:/result";*/
         return "result";
