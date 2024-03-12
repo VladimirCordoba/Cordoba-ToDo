@@ -18,11 +18,11 @@ public class HelloController {
         model.addAttribute("name", name);
         return "hello";
         }
-    @GetMapping
+    /*@GetMapping
     public String index(){
 
         return "index";
-    }
+    }*/
     @GetMapping("index")
     public String index1() {
         return "index";
