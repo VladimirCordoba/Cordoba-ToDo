@@ -118,6 +118,12 @@ public class TasksController {
        // return "redirect:/taskEdit";
         return "taskEdit";
     }
+   /* @GetMapping ("/consol/task/list")  // Тут получаем список всех тасеов из Базы для консольног приложения
+    // @RequestMapping("/consol/task/list")
+    public void  consolAllTasksList1(Model model){
+        //  ArrangedList.arrange(tasksRepository);
 
+        System.out.println(ArrangedList.arrange(tasksRepository));
+    }*/
 
 }
