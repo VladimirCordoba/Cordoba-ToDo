@@ -39,6 +39,12 @@ public class Tasks {
         this.priority = priority;
     }
 
+    public Tasks(Long id, Priority priority) {
+        this.id = id;
+        this.priority = priority;
+    }
+
+
     public Tasks() {
     }
 

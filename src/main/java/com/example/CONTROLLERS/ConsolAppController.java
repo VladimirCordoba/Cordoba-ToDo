@@ -6,6 +6,8 @@ import com.example.Priority;
 import com.example.Status;
 import com.example.models.Tasks;
 import com.example.repo.TasksRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.DelegatingServerHttpResponse;
@@ -14,8 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
 // @Controller
@@ -53,7 +62,7 @@ public  class ConsolAppController {
 
     }
 
-
+/*
    @PostMapping ("consol/task/update/priority")
   //  @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public void updateTasksConsol( @RequestParam String id1, String priority1, Model model) {
@@ -81,7 +90,59 @@ public  class ConsolAppController {
         }
         tasksRepository.save(tasks1);
 
+    }*/
+
+  //---------------------------> попробуем принять json из десктоп риложения <------------------------------
+   // @PostMapping ("consol/task/update/priority")
+
+   // @RequestMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+     // @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+
+  // @RequestMapping(value = "consol/task/update/priority", method= RequestMethod.POST)
+   @PostMapping(value = "consol/task/update/priority")
+   public void updateTasksConsolJson( @RequestBody String jsonTaskObject, Model model) throws IOException, URISyntaxException {
+
+  //  public void updateTasksConsolJson( @RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+        String url = jsonTaskObject;
+       String result = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
+     //   System.out.println(jsonTaskObject1);
+
+        // if ( jsonTaskObject != null){
+          //   Tasks editedTaks = jsonTaskObject;
+
+        // }
+    //   URI jsonUrl = new URI(jsonTaskObject);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+         Tasks editedTaks = objectMapper.readValue(result, Tasks.class);
+     //  Tasks editedTaks = objectMapper.readValue(jsonUrl.toURL(), Tasks.class);
+     //  System.out.println(" Task to string ="+ editedTaks.toString());
+
+       if (!tasksRepository.existsById(editedTaks.getId())) {     //<--------------5
+           // if (!tasksRepository.existsById((long)4053)) {
+
+            System.out.println("id does not exist");
+        }
+        Tasks tasks1 = tasksRepository.findById(editedTaks.getId()).orElseThrow();//<--------------5
+      // Tasks tasks1 = tasksRepository.findById((long)4053).orElseThrow();
+
+       // if (Objects.equals(editedTaks.getPriority(), "HIGH")) {
+            if (editedTaks.getPriority().toString().equals("HIGH")) {
+
+            tasks1.setPriority(Priority.HIGH);
+
+        } else if (editedTaks.getPriority().toString().equals("MEDIUM")) {
+
+            tasks1.setPriority(Priority.MEDIUM);
+
+        } else {
+            tasks1.setPriority(Priority.LOW);
+
+        }
+        tasksRepository.save(tasks1);
 
     }
+
 
 }
