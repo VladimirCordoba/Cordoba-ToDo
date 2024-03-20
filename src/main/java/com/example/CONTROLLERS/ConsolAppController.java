@@ -99,13 +99,14 @@ public  class ConsolAppController {
      // @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 
   // @RequestMapping(value = "consol/task/update/priority", method= RequestMethod.POST)
-   @PostMapping(value = "consol/task/update/priority")
-   public void updateTasksConsolJson( @RequestBody String jsonTaskObject, Model model) throws IOException, URISyntaxException {
 
-  //  public void updateTasksConsolJson( @RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+   @PostMapping(value = "consol/task/update/priority")
+ //  public void updateTasksConsolJson( @RequestBody String jsonTaskObject, Model model) throws IOException, URISyntaxException {
+
+    public void updateTasksConsolJson( @RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
      //   String url = jsonTaskObject;
      //  String result = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
-       String result = jsonTaskObject;
+     //  String result = jsonTaskObject;
      //   System.out.println(jsonTaskObject1);
 
         // if ( jsonTaskObject != null){
@@ -116,24 +117,24 @@ public  class ConsolAppController {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-         Tasks editedTaks = objectMapper.readValue(result, Tasks.class);
+      //   Tasks editedTaks = objectMapper.readValue(editedTask, Tasks.class);
      //  Tasks editedTaks = objectMapper.readValue(jsonUrl.toURL(), Tasks.class);
      //  System.out.println(" Task to string ="+ editedTaks.toString());
 
-       if (!tasksRepository.existsById(editedTaks.getId())) {     //<--------------5
-           // if (!tasksRepository.existsById((long)4053)) {
+       if (!tasksRepository.existsById(jsonTaskObject.getId())) {     //<--------------5
 
-            System.out.println("id does not exist");
+           System.out.println("id does not exist");
         }
-        Tasks tasks1 = tasksRepository.findById(editedTaks.getId()).orElseThrow();//<--------------5
+        Tasks tasks1 = tasksRepository.findById(jsonTaskObject.getId()).orElseThrow();//<--------------5
       // Tasks tasks1 = tasksRepository.findById((long)4053).orElseThrow();
 
-       // if (Objects.equals(editedTaks.getPriority(), "HIGH")) {
-            if (editedTaks.getPriority().toString().equals("HIGH")) {
+        if (Objects.equals(jsonTaskObject.getPriority().toString(), "HIGH")) {
+         //   if (editedTaks.getPriority().toString().equals("HIGH")) {
 
             tasks1.setPriority(Priority.HIGH);
 
-        } else if (editedTaks.getPriority().toString().equals("MEDIUM")) {
+       // } else if (editedTaks.getPriority().toString().equals("MEDIUM")) {
+        } else if (Objects.equals(jsonTaskObject.getPriority().toString(),"MEDIUM")) {
 
             tasks1.setPriority(Priority.MEDIUM);
 
