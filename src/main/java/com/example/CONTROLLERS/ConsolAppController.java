@@ -103,8 +103,9 @@ public  class ConsolAppController {
    public void updateTasksConsolJson( @RequestBody String jsonTaskObject, Model model) throws IOException, URISyntaxException {
 
   //  public void updateTasksConsolJson( @RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
-        String url = jsonTaskObject;
-       String result = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
+     //   String url = jsonTaskObject;
+     //  String result = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
+       String result = jsonTaskObject;
      //   System.out.println(jsonTaskObject1);
 
         // if ( jsonTaskObject != null){
