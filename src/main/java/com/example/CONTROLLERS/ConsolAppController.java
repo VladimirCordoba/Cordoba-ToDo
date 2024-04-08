@@ -28,33 +28,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
 // @Controller
-public  class ConsolAppController {
+public class ConsolAppController {
 
     @Autowired
     private TasksRepository tasksRepository;
 
 
-   @GetMapping ("/consol/task/list")  // Тут получаем список всех тасеов из Базы для консольног приложения
+    @GetMapping("/consol/task/list")  // Тут получаем список всех тасеов из Базы для консольног приложения
     // @RequestMapping("/consol/task/list")
-    public ArrayList consolAllTasksList1(Model model){
+    public ArrayList consolAllTasksList1(Model model) {
         //  ArrangedList.arrange(tasksRepository);
 
-      //  System.out.println(ArrangedList.arrange(tasksRepository).toString());
+        //  System.out.println(ArrangedList.arrange(tasksRepository).toString());
         return (ArrangedList.arrange(tasksRepository));
     }
+
     @PostMapping("/consol/task/create")
-    public  void addTasks(@RequestParam String task, Model model) {
+    public void addTasks(@RequestParam String task, Model model) {
         Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
         tasksRepository.save(tasks);
 
     }
+
     @PostMapping("/consol/task/close")
-    public  void closeTasks(@RequestParam String id1, Model model) {
-     // String sid = id1;
-     int  intid = Integer.parseInt(id1); //преобразовываем строку в число.
-        Long id =(long)intid;
-        if(!tasksRepository.existsById(id)){
-           System.out.println("id does not exist");
+    public void closeTasks(@RequestParam String id1, Model model) {
+        // String sid = id1;
+        int intid = Integer.parseInt(id1); //преобразовываем строку в число.
+        Long id = (long) intid;
+        if (!tasksRepository.existsById(id)) {
+            System.out.println("id does not exist");
         }
         Tasks task = tasksRepository.findById(id).orElseThrow();
         task.setStatus(Status.CLOSED);
@@ -92,59 +94,56 @@ public  class ConsolAppController {
 
     }*/
 
-  //---------------------------> попробуем принять json из десктоп риложения <------------------------------
-   // @PostMapping ("consol/task/update/priority")
+    //---------------------------> попробуем принять json из десктоп риложения <------------------------------
+    // @PostMapping ("consol/task/update/priority")
 
-   // @RequestMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-     // @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    // @RequestMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    // @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 
-  // @RequestMapping(value = "consol/task/update/priority", method= RequestMethod.POST)
+    // @RequestMapping(value = "consol/task/update/priority", method= RequestMethod.POST)
 
-   @PostMapping(value = "consol/task/update/priority")
- //  public void updateTasksConsolJson( @RequestBody String jsonTaskObject, Model model) throws IOException, URISyntaxException {
+    @PostMapping(value = "consol/task/update/priority")
+    public void updateTasksConsolJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
 
-    public void updateTasksConsolJson( @RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
-     //   String url = jsonTaskObject;
-     //  String result = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
-     //  String result = jsonTaskObject;
-     //   System.out.println(jsonTaskObject1);
-
-        // if ( jsonTaskObject != null){
-          //   Tasks editedTaks = jsonTaskObject;
-
-        // }
-    //   URI jsonUrl = new URI(jsonTaskObject);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-      //   Tasks editedTaks = objectMapper.readValue(editedTask, Tasks.class);
-     //  Tasks editedTaks = objectMapper.readValue(jsonUrl.toURL(), Tasks.class);
-     //  System.out.println(" Task to string ="+ editedTaks.toString());
-
-       if (!tasksRepository.existsById(jsonTaskObject.getId())) {     //<--------------5
-
-           System.out.println("id does not exist");
+        if (!tasksRepository.existsById(jsonTaskObject.getId())) {
+            System.out.println("id does not exist");
         }
-        Tasks tasks1 = tasksRepository.findById(jsonTaskObject.getId()).orElseThrow();//<--------------5
-      // Tasks tasks1 = tasksRepository.findById((long)4053).orElseThrow();
+
+        Tasks tasks1 = tasksRepository.findById(jsonTaskObject.getId()).orElseThrow();
 
         if (Objects.equals(jsonTaskObject.getPriority().toString(), "HIGH")) {
-         //   if (editedTaks.getPriority().toString().equals("HIGH")) {
-
             tasks1.setPriority(Priority.HIGH);
-
-       // } else if (editedTaks.getPriority().toString().equals("MEDIUM")) {
-        } else if (Objects.equals(jsonTaskObject.getPriority().toString(),"MEDIUM")) {
-
+        } else if (Objects.equals(jsonTaskObject.getPriority().toString(), "MEDIUM")) {
             tasks1.setPriority(Priority.MEDIUM);
-
         } else {
             tasks1.setPriority(Priority.LOW);
-
         }
         tasksRepository.save(tasks1);
+    }
+    //создадим новый контроллер для обработки React запроса на добавление таск
+    @PostMapping(value = "react/addtask")
+    public void addTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
 
+        Tasks newTasks = jsonTaskObject;
+        String task = newTasks.getTask();
+        Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
+      //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
+     //   System.out.println(jsonTaskObject.getTask());
+         tasksRepository.save(tasks);
     }
 
+
+    //создадим новый контроллер для обработки React запроса на добавление таск
+    @PostMapping(value = "react/deltask")
+    public void delTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+
+        Tasks newTasks = jsonTaskObject;
+        Long id = newTasks.getId();
+        tasksRepository.deleteById(id);
+      //  Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
+        //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
+        //   System.out.println(jsonTaskObject.getTask());
+      //  tasksRepository.save(tasks);
+    }
 
 }
