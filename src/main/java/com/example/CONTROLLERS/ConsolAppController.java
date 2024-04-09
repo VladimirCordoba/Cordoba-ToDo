@@ -162,8 +162,25 @@ public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) t
                  //   tasks1.setPriority(priority);
                     tasksRepository.save(tasks1);
 
+    }
+
+    @PostMapping(value = "react/editstatus")
+    public void statusTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+
+        Tasks newTasks = jsonTaskObject;
+        Long id = newTasks.getId();
+        Status status = newTasks.getStatus();
+        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+                   if (Objects.equals(status, Status.OPEN)){
+                       tasks1.setStatus(Status.CLOSED);
+                    }else tasks1.setStatus(Status.OPEN);
+          tasksRepository.save(tasks1);
 
     }
+
+
+
+
 
 }
 
