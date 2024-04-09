@@ -145,5 +145,27 @@ public class ConsolAppController {
         //   System.out.println(jsonTaskObject.getTask());
       //  tasksRepository.save(tasks);
     }
+//new controllet for React app - task edit
+@PostMapping(value = "react/edittask")
+public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+
+            Tasks newTasks = jsonTaskObject;
+            Long id = newTasks.getId();
+         //   Status status = newTasks.getStatus();
+            String task = newTasks.getTask();
+         //   Priority priority = newTasks.getPriority();
+
+                    Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+                   // model.addAttribute("listOfTasks", tasks1);
+                 //   tasks1.setStatus(status);
+                    tasks1.setTask(task);
+                 //   tasks1.setPriority(priority);
+                    tasksRepository.save(tasks1);
+
+
+    }
 
 }
+
+
+
