@@ -126,7 +126,7 @@ public class ConsolAppController {
 
         Tasks newTasks = jsonTaskObject;
         String task = newTasks.getTask();
-        Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
+        Tasks tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
       //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
      //   System.out.println(jsonTaskObject.getTask());
          tasksRepository.save(tasks);
@@ -170,15 +170,18 @@ public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) t
         Tasks newTasks = jsonTaskObject;
         Long id = newTasks.getId();
         Status status = newTasks.getStatus();
+
         Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
                    if (Objects.equals(status, Status.OPEN)){
                        tasks1.setStatus(Status.CLOSED);
-                    }else tasks1.setStatus(Status.OPEN);
+                       tasks1.setPriority(Priority.LOW);
+                    }else {
+                       tasks1.setStatus(Status.OPEN);
+                       tasks1.setPriority(Priority.HIGH);
+                   }
           tasksRepository.save(tasks1);
 
     }
-
-
 
 
 
