@@ -45,6 +45,9 @@ public class ConsolAppController {
 
     @PostMapping("/consol/task/create")
     public void addTasks(@RequestParam String task, Model model) {
+
+        Tasks task11 = tasksRepository.findById(tasksRepository.count()).orElseThrow();
+
         Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
         tasksRepository.save(tasks);
 
@@ -127,6 +130,16 @@ public class ConsolAppController {
         Tasks newTasks = jsonTaskObject;
         String task = newTasks.getTask();
         Tasks tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
+
+        ArrayList<Tasks> tasksList = new ArrayList<>(); //------
+        tasksList = ArrangedList.arrange(tasksRepository); //-----
+
+      //  Tasks lastEl = tasksList.get((int)tasksRepository.count()-1);  //----
+        Tasks lastEl = tasksList.get(0);  //----
+
+        lastEl.setPriority(Priority.MEDIUM); //----
+        tasksRepository.save(lastEl); //------
+
       //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
      //   System.out.println(jsonTaskObject.getTask());
          tasksRepository.save(tasks);
@@ -170,6 +183,7 @@ public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) t
         Tasks newTasks = jsonTaskObject;
         Long id = newTasks.getId();
         Status status = newTasks.getStatus();
+
 
         Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
                    if (Objects.equals(status, Status.OPEN)){

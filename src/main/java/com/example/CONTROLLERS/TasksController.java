@@ -33,7 +33,7 @@ public class TasksController {
 
     @PostMapping("/task/create")
     public Object addTasks(@RequestParam String task, Model model) {
-      Tasks  tasks = new Tasks(Status.OPEN, task, Priority.LOW);
+      Tasks  tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
        tasksRepository.save(tasks);
 
       //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
