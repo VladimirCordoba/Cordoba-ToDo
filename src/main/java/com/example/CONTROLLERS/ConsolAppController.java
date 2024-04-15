@@ -34,12 +34,12 @@ public class ConsolAppController {
     private TasksRepository tasksRepository;
 
 
-    @GetMapping("/consol/task/list")  // Тут получаем список всех тасеов из Базы для консольног приложения
-    // @RequestMapping("/consol/task/list")
-    public ArrayList consolAllTasksList1(Model model) {
-        //  ArrangedList.arrange(tasksRepository);
+    //------------> Тут получаем список всех тасеов из Базы для консольного приложения <--------------
 
-        //  System.out.println(ArrangedList.arrange(tasksRepository).toString());
+    @GetMapping("/consol/task/list")
+
+    public ArrayList consolAllTasksList1(Model model) {
+
         return (ArrangedList.arrange(tasksRepository));
     }
 
@@ -67,43 +67,9 @@ public class ConsolAppController {
 
     }
 
-/*
-   @PostMapping ("consol/task/update/priority")
-  //  @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public void updateTasksConsol( @RequestParam String id1, String priority1, Model model) {
-
-        int  intid = Integer.parseInt(id1); //преобразовываем строку в число.
-        Long id =(long)intid;
-
-        if(!tasksRepository.existsById(id)){
-            System.out.println("id does not exist");
-        }
-        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
-
-        if (Objects.equals(priority1,"1")){
-
-            tasks1.setPriority(Priority.HIGH);
-
-        }else if (Objects.equals(priority1,"2")) {
-
-           tasks1.setPriority(Priority.MEDIUM);
-
-        }else
-        {
-            tasks1.setPriority(Priority.LOW);
-
-        }
-        tasksRepository.save(tasks1);
-
-    }*/
 
     //---------------------------> попробуем принять json из десктоп риложения <------------------------------
-    // @PostMapping ("consol/task/update/priority")
 
-    // @RequestMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    // @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-
-    // @RequestMapping(value = "consol/task/update/priority", method= RequestMethod.POST)
 
     @PostMapping(value = "consol/task/update/priority")
     public void updateTasksConsolJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
@@ -123,80 +89,79 @@ public class ConsolAppController {
         }
         tasksRepository.save(tasks1);
     }
-    //создадим новый контроллер для обработки React запроса на добавление таск
+
+    //-------------------->  новый контроллер для обработки React запроса на добавление таск <-------------------------
+
+
     @PostMapping(value = "react/addtask")
     public void addTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
 
         Tasks newTasks = jsonTaskObject;
         String task = newTasks.getTask();
-        Tasks tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
 
-        ArrayList<Tasks> tasksList = new ArrayList<>(); //------
-        tasksList = ArrangedList.arrange(tasksRepository); //-----
+        Long priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
 
-      //  Tasks lastEl = tasksList.get((int)tasksRepository.count()-1);  //----
-        Tasks lastEl = tasksList.get(0);  //----
+        Tasks tasks = new Tasks(Status.OPEN, task, Priority.HIGH, priorityNew);
 
-        lastEl.setPriority(Priority.MEDIUM); //----
-        tasksRepository.save(lastEl); //------
-
-      //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
-     //   System.out.println(jsonTaskObject.getTask());
-         tasksRepository.save(tasks);
+        tasksRepository.save(tasks);
     }
 
+    //---------------------------> создадим новый контроллер для обработки React запроса на добавление таск <------------------------------
 
-    //создадим новый контроллер для обработки React запроса на добавление таск
     @PostMapping(value = "react/deltask")
     public void delTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
 
         Tasks newTasks = jsonTaskObject;
         Long id = newTasks.getId();
         tasksRepository.deleteById(id);
-      //  Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
-        //  Tasks tasks = new Tasks(Status.OPEN, jsonTaskObject.getTask(), Priority.LOW);
-        //   System.out.println(jsonTaskObject.getTask());
-      //  tasksRepository.save(tasks);
+
     }
-//new controllet for React app - task edit
-@PostMapping(value = "react/edittask")
-public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    //---------------------------> new controllet for React app - task edit  <------------------------------
 
-            Tasks newTasks = jsonTaskObject;
-            Long id = newTasks.getId();
-         //   Status status = newTasks.getStatus();
-            String task = newTasks.getTask();
-         //   Priority priority = newTasks.getPriority();
 
-                    Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
-                   // model.addAttribute("listOfTasks", tasks1);
-                 //   tasks1.setStatus(status);
-                    tasks1.setTask(task);
-                 //   tasks1.setPriority(priority);
-                    tasksRepository.save(tasks1);
+    @PostMapping(value = "react/edittask")
+    public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+
+        Tasks newTasks = jsonTaskObject;
+        Long id = newTasks.getId();
+
+        String task = newTasks.getTask();
+
+
+        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+
+        tasks1.setTask(task);
+
+        tasksRepository.save(tasks1);
 
     }
 
     @PostMapping(value = "react/editstatus")
     public void statusTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
 
-        Tasks newTasks = jsonTaskObject;
-        Long id = newTasks.getId();
-        Status status = newTasks.getStatus();
+
+        Tasks tasks = jsonTaskObject;
+
+        Long id = tasks.getId();
+
+        Status status = tasks.getStatus();
+
+        tasks = tasksRepository.findById(id).orElseThrow();
 
 
-        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
-                   if (Objects.equals(status, Status.OPEN)){
-                       tasks1.setStatus(Status.CLOSED);
-                       tasks1.setPriority(Priority.LOW);
-                    }else {
-                       tasks1.setStatus(Status.OPEN);
-                       tasks1.setPriority(Priority.HIGH);
-                   }
-          tasksRepository.save(tasks1);
+        Long priorityNew = tasksRepository.count() + 1;
+        if (Objects.equals(status, Status.OPEN)) {
+            tasks.setStatus(Status.CLOSED);
+            tasks.setPriorityNew((long) 1);
+        } else {
+            tasks.setStatus(Status.OPEN);
+
+            priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
+            tasks.setPriorityNew(priorityNew);
+        }
+        tasksRepository.save(tasks);
 
     }
-
 
 
 }

@@ -18,6 +18,24 @@ public class Tasks {
    private String task;
    private Priority priority;
 
+   private Long priorityNew;
+
+    public Long getPriorityNew() {
+        return priorityNew;
+    }
+
+    public void setPriorityNew(Long priorityNew) {
+        this.priorityNew = priorityNew;
+    }
+
+    public Tasks( Status status, String task, Priority priority, Long priorityNew) {
+      //  this.id = id;
+        this.status = status;
+        this.task = task;
+        this.priority = priority;
+        this.priorityNew = priorityNew;
+    }
+
     public Priority getPriority() {
         return priority;
     }
