@@ -33,6 +33,7 @@ public class TasksController {
 
     @PostMapping("/task/create")
     public Object addTasks(@RequestParam String task, Model model) {
+
       Tasks  tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
        tasksRepository.save(tasks);
 
