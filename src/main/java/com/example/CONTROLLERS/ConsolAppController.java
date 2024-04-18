@@ -6,6 +6,7 @@ import com.example.Priority;
 import com.example.Status;
 import com.example.models.Tasks;
 import com.example.repo.TasksRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static com.example.Priority.HIGH;
+import static com.example.Status.OPEN;
+import static org.springframework.util.ClassUtils.isPresent;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
 // @Controller
@@ -146,7 +151,11 @@ public class ConsolAppController {
 
         Status status = tasks.getStatus();
 
-        tasks = tasksRepository.findById(id).orElseThrow();
+     //   tasks = tasksRepository.findById(id).orElseThrow();
+    //  tasks = tasksRepository.findById(id).orElse(null);
+        tasks = tasksRepository.findById(id).isPresent() ?
+              //  tasksRepository.findById(id).get() : null;
+                 tasksRepository.findById(id).get() : new Tasks(4053L,OPEN,"Таска не существует", HIGH, 47L);
 
 
         Long priorityNew = tasksRepository.count() + 1;
