@@ -2,13 +2,10 @@ package com.example.models;
 
 import com.example.Priority;
 import com.example.Status;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import jakarta.persistence.*;
 
-import static com.example.Status.OPEN;
-
 @Entity
-public class Tasks {
+public class Task {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
@@ -20,7 +17,7 @@ public class Tasks {
 
    private Long priorityNew;
 
-    public Tasks(long id, Status status, String tasktext, Priority priority, long priorityNew) {
+    public Task(long id, Status status, String tasktext, Priority priority, long priorityNew) {
         this.id = id;
         this.status = status;
         this.task = tasktext;
@@ -36,7 +33,7 @@ public class Tasks {
         this.priorityNew = priorityNew;
     }
 
-    public Tasks( Status status, String task, Priority priority, Long priorityNew) {
+    public Task(Status status, String task, Priority priority, Long priorityNew) {
       //  this.id = id;
         this.status = status;
         this.task = task;
@@ -52,26 +49,26 @@ public class Tasks {
         this.priority = priority;
     }
 
-    public Tasks(Long id, Status status, String task, Priority priority) {
+    public Task(Long id, Status status, String task, Priority priority) {
         this.id = id;
         this.status = status;
         this.task = task;
         this.priority = priority;
     }
 
-    public Tasks(Status status, String task, Priority priority) {
+    public Task(Status status, String task, Priority priority) {
         this.status = status;
         this.task = task;
         this.priority = priority;
     }
 
-    public Tasks(Long id, Priority priority) {
+    public Task(Long id, Priority priority) {
         this.id = id;
         this.priority = priority;
     }
 
 
-    public Tasks() {
+    public Task() {
     }
 
     public Long getId() {

@@ -3,19 +3,12 @@ package com.example.CONTROLLERS;
 import com.example.ArrangedList;
 import com.example.Priority;
 import com.example.Status;
-import com.example.models.Tasks;
+import com.example.models.Task;
 import com.example.repo.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class TasksController {
@@ -34,7 +27,7 @@ public class TasksController {
     @PostMapping("/task/create")
     public Object addTasks(@RequestParam String task, Model model) {
 
-      Tasks  tasks = new Tasks(Status.OPEN, task, Priority.HIGH);
+      Task tasks = new Task(Status.OPEN, task, Priority.HIGH);
        tasksRepository.save(tasks);
 
       //  Iterable<Tasks> tasks1 = tasksRepository.findAll();
@@ -62,7 +55,7 @@ public class TasksController {
         if(!tasksRepository.existsById(id)){
             return"result";
         }
-        Tasks task = tasksRepository.findById(id).orElseThrow();
+        Task task = tasksRepository.findById(id).orElseThrow();
         task.setStatus(Status.CLOSED);
          tasksRepository.save(task);
         // model.addAttribute("listOfTasks", tasks);
@@ -95,8 +88,8 @@ public class TasksController {
         if(!tasksRepository.existsById(id)){
             return"result";
         }
-       Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
-        model.addAttribute("listOfTasks", tasks1);
+       Task task1 = tasksRepository.findById(id).orElseThrow();
+        model.addAttribute("listOfTasks", task1);
       // tasks1.setStatus("X");
      //  tasks1.setTask(task);
       // tasksRepository.save(tasks1);
@@ -109,12 +102,12 @@ public class TasksController {
         if(!tasksRepository.existsById(id)){
             return"result";
         }
-        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
-        model.addAttribute("listOfTasks", tasks1);
-        tasks1.setStatus(status);
-        tasks1.setTask(task);
-        tasks1.setPriority(priority);
-        tasksRepository.save(tasks1);
+        Task task1 = tasksRepository.findById(id).orElseThrow();
+        model.addAttribute("listOfTasks", task1);
+        task1.setStatus(status);
+        task1.setTask(task);
+        task1.setPriority(priority);
+        tasksRepository.save(task1);
 
        // return "redirect:/taskEdit";
         return "taskEdit";

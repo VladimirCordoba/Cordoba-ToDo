@@ -4,32 +4,19 @@ package com.example.CONTROLLERS;
 import com.example.ArrangedList;
 import com.example.Priority;
 import com.example.Status;
-import com.example.models.Tasks;
+import com.example.models.Task;
 import com.example.repo.TasksRepository;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.server.DelegatingServerHttpResponse;
-import org.springframework.instrument.classloading.LoadTimeWeaver;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 
 import static com.example.Priority.HIGH;
 import static com.example.Status.OPEN;
-import static org.springframework.util.ClassUtils.isPresent;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
 // @Controller
@@ -51,9 +38,9 @@ public class ConsolAppController {
     @PostMapping("/consol/task/create")
     public void addTasks(@RequestParam String task, Model model) {
 
-        Tasks task11 = tasksRepository.findById(tasksRepository.count()).orElseThrow();
+        Task task11 = tasksRepository.findById(tasksRepository.count()).orElseThrow();
 
-        Tasks tasks = new Tasks(Status.OPEN, task, Priority.LOW);
+        Task tasks = new Task(Status.OPEN, task, Priority.LOW);
         tasksRepository.save(tasks);
 
     }
@@ -66,7 +53,7 @@ public class ConsolAppController {
         if (!tasksRepository.existsById(id)) {
             System.out.println("id does not exist");
         }
-        Tasks task = tasksRepository.findById(id).orElseThrow();
+        Task task = tasksRepository.findById(id).orElseThrow();
         task.setStatus(Status.CLOSED);
         tasksRepository.save(task);
 
@@ -77,36 +64,36 @@ public class ConsolAppController {
 
 
     @PostMapping(value = "consol/task/update/priority")
-    public void updateTasksConsolJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    public void updateTasksConsolJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
 
         if (!tasksRepository.existsById(jsonTaskObject.getId())) {
             System.out.println("id does not exist");
         }
 
-        Tasks tasks1 = tasksRepository.findById(jsonTaskObject.getId()).orElseThrow();
+        Task task1 = tasksRepository.findById(jsonTaskObject.getId()).orElseThrow();
 
         if (Objects.equals(jsonTaskObject.getPriority().toString(), "HIGH")) {
-            tasks1.setPriority(Priority.HIGH);
+            task1.setPriority(Priority.HIGH);
         } else if (Objects.equals(jsonTaskObject.getPriority().toString(), "MEDIUM")) {
-            tasks1.setPriority(Priority.MEDIUM);
+            task1.setPriority(Priority.MEDIUM);
         } else {
-            tasks1.setPriority(Priority.LOW);
+            task1.setPriority(Priority.LOW);
         }
-        tasksRepository.save(tasks1);
+        tasksRepository.save(task1);
     }
 
     //-------------------->  новый контроллер для обработки React запроса на добавление таск <-------------------------
 
 
     @PostMapping(value = "react/addtask")
-    public void addTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    public void addTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
 
-        Tasks newTasks = jsonTaskObject;
-        String task = newTasks.getTask();
+        Task newTask = jsonTaskObject;
+        String task = newTask.getTask();
 
         Long priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
 
-        Tasks tasks = new Tasks(Status.OPEN, task, Priority.HIGH, priorityNew);
+        Task tasks = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
 
         tasksRepository.save(tasks);
     }
@@ -114,10 +101,10 @@ public class ConsolAppController {
     //---------------------------> создадим новый контроллер для обработки React запроса на добавление таск <------------------------------
 
     @PostMapping(value = "react/deltask")
-    public void delTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    public void delTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
 
-        Tasks newTasks = jsonTaskObject;
-        Long id = newTasks.getId();
+        Task newTask = jsonTaskObject;
+        Long id = newTask.getId();
         tasksRepository.deleteById(id);
 
     }
@@ -125,53 +112,56 @@ public class ConsolAppController {
 
 
     @PostMapping(value = "react/edittask")
-    public void editTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    public void editTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
 
-        Tasks newTasks = jsonTaskObject;
-        Long id = newTasks.getId();
+        Task newTask = jsonTaskObject;
+        Long id = newTask.getId();
 
-        String task = newTasks.getTask();
+        String task = newTask.getTask();
 
 
-        Tasks tasks1 = tasksRepository.findById(id).orElseThrow();
+        Task task1 = tasksRepository.findById(id).orElseThrow();
 
-        tasks1.setTask(task);
+        task1.setTask(task);
 
-        tasksRepository.save(tasks1);
+        tasksRepository.save(task1);
 
     }
 
     @PostMapping(value = "react/editstatus")
-    public void statusTasksReactJson(@RequestBody Tasks jsonTaskObject, Model model) throws JsonProcessingException {
+    public void statusTasksReactJson(@RequestBody Task request, Model model) throws Exception {
 
 
-        Tasks tasks = jsonTaskObject;
+        Long id = request.getId();
 
-        Long id = tasks.getId();
+        Status status = request.getStatus();
 
-        Status status = tasks.getStatus();
+     Optional<Task> foundTask = tasksRepository.findById(id);
+     if (foundTask.isEmpty()){
+         throw new Exception("No task in database with id:"+Long.toString(id));
+     }
+     Task existingTask = foundTask.get();
 
-     //   tasks = tasksRepository.findById(id).orElseThrow();
-    //  tasks = tasksRepository.findById(id).orElse(null);
-        tasks = tasksRepository.findById(id).isPresent() ?
+
+    //  task = tasksRepository.findById(id).orElse(null);
+      //  task = tasksRepository.findById(id).isPresent() ?
               //  tasksRepository.findById(id).get() : null;
-                 tasksRepository.findById(id).get() : new Tasks(4053L,OPEN,"Таска не существует", HIGH, 47L);
+                // tasksRepository.findById(id).get() : new Task(4053L,OPEN,"Таска не существует", HIGH, 47L);
 
 
         Long priorityNew = tasksRepository.count() + 1;
         if (Objects.equals(status, Status.OPEN)) {
-            tasks.setStatus(Status.CLOSED);
-            tasks.setPriorityNew((long) 1);
+            existingTask.setStatus(Status.CLOSED);
+            existingTask.setPriorityNew((long) 1);
         } else {
-            tasks.setStatus(Status.OPEN);
+            existingTask.setStatus(Status.OPEN);
 
             priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
-            tasks.setPriorityNew(priorityNew);
+            existingTask.setPriorityNew(priorityNew);
         }
-        tasksRepository.save(tasks);
+        tasksRepository.save(existingTask);
 
     }
-
 
 }
 
