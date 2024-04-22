@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import static com.example.Priority.HIGH;
 import static com.example.Status.OPEN;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
@@ -49,7 +51,7 @@ ConsolAppController consolAppController = new ConsolAppController();
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(input));
 
-       // verify(tasksRepositoryMoc, times(1)).save(existingTask);
+        verify(tasksRepositoryMoc, times(1)).save(existingTask.get());
 
     }
 }

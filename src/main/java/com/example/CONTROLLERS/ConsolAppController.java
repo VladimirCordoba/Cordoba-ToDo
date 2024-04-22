@@ -143,13 +143,8 @@ public class ConsolAppController {
      Task existingTask = foundTask.get();
 
 
-    //  task = tasksRepository.findById(id).orElse(null);
-      //  task = tasksRepository.findById(id).isPresent() ?
-              //  tasksRepository.findById(id).get() : null;
-                // tasksRepository.findById(id).get() : new Task(4053L,OPEN,"Таска не существует", HIGH, 47L);
 
-
-        Long priorityNew = tasksRepository.count() + 1;
+        long priorityNew = tasksRepository.count() + 1;
         if (Objects.equals(status, Status.OPEN)) {
             existingTask.setStatus(Status.CLOSED);
             existingTask.setPriorityNew((long) 1);
