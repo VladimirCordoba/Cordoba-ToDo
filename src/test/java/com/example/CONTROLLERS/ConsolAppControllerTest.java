@@ -3,6 +3,7 @@ package com.example.CONTROLLERS;
 import com.example.models.Task;
 import com.example.repo.TasksRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,14 +12,19 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
 import static com.example.Priority.HIGH;
+import static com.example.Status.CLOSED;
 import static com.example.Status.OPEN;
+//import static jdk.jfr.internal.util.Matcher.match;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
@@ -43,13 +49,17 @@ ConsolAppController consolAppController = new ConsolAppController();
 
 
     Optional<Task> existingTask = Optional.of( new Task(4053L,OPEN,"tasktext", HIGH, 47L));
-        String input = objectMapper.writeValueAsString(existingTask.get());
-    Mockito.when(tasksRepositoryMoc.findById(4053L)).thenReturn(existingTask);
-
+    String input = objectMapper.writeValueAsString(existingTask.get());
+    //  Mockito.when(tasksRepositoryMoc.findById(4053L)).thenReturn(existingTask);
+    Mockito.when(tasksRepositoryMoc.findById(Mockito.any())).thenReturn(existingTask);
         sut.perform(post("/react/editstatus")
 
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(input));
+
+                  Assertions.assertEquals(existingTask.get().getId(), 4053L);
+                  Assertions.assertEquals(existingTask.get().getStatus(), CLOSED);
+
 
         verify(tasksRepositoryMoc, times(1)).save(existingTask.get());
 

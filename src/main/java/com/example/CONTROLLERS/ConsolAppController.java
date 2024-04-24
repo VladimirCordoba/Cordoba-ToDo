@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.Priority.HIGH;
+import static com.example.Status.CLOSED;
 import static com.example.Status.OPEN;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
@@ -146,7 +147,7 @@ public class ConsolAppController {
 
         long priorityNew = tasksRepository.count() + 1;
         if (Objects.equals(status, Status.OPEN)) {
-            existingTask.setStatus(Status.CLOSED);
+            existingTask.setStatus(CLOSED);
             existingTask.setPriorityNew((long) 1);
         } else {
             existingTask.setStatus(Status.OPEN);
@@ -155,7 +156,7 @@ public class ConsolAppController {
             existingTask.setPriorityNew(priorityNew);
         }
         tasksRepository.save(existingTask);
-
+      //  tasksRepository.save(existingTask);
     }
 
 }
