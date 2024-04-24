@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.Priority.HIGH;
+import static com.example.Status.CLOSED;
 import static com.example.Status.OPEN;
 
 @RestController  // поменял @Controller на @RestController поскольку он возвращает JSON
@@ -143,15 +144,10 @@ public class ConsolAppController {
      Task existingTask = foundTask.get();
 
 
-    //  task = tasksRepository.findById(id).orElse(null);
-      //  task = tasksRepository.findById(id).isPresent() ?
-              //  tasksRepository.findById(id).get() : null;
-                // tasksRepository.findById(id).get() : new Task(4053L,OPEN,"Таска не существует", HIGH, 47L);
 
-
-        Long priorityNew = tasksRepository.count() + 1;
+        long priorityNew = tasksRepository.count() + 1;
         if (Objects.equals(status, Status.OPEN)) {
-            existingTask.setStatus(Status.CLOSED);
+            existingTask.setStatus(CLOSED);
             existingTask.setPriorityNew((long) 1);
         } else {
             existingTask.setStatus(Status.OPEN);
@@ -160,7 +156,7 @@ public class ConsolAppController {
             existingTask.setPriorityNew(priorityNew);
         }
         tasksRepository.save(existingTask);
-
+      //  tasksRepository.save(existingTask);
     }
 
 }
