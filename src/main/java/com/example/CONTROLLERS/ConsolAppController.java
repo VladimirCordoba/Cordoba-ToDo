@@ -87,19 +87,21 @@ public class ConsolAppController {
 
 
     @PostMapping(value = "react/addtask")
-    public void addTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
+    public void addTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws Exception {
 
-        Task newTask = jsonTaskObject;
-        String task = newTask.getTask();
+      //  Task newTask = jsonTaskObject;
+     //   String task = newTask.getTask();
+        String task = jsonTaskObject.getTask();
 
         Long priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
 
-        Task tasks = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
-
-        tasksRepository.save(tasks);
+       // Task tasks = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
+       Task existingTask = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
+      //  tasksRepository.save(tasks);
+        tasksRepository.save(existingTask);
     }
 
-    //---------------------------> создадим новый контроллер для обработки React запроса на добавление таск <------------------------------
+    //---------------------------> создадим новый контроллер для обработки React запроса на удаление таск <------------------------------
 
     @PostMapping(value = "react/deltask")
     public void delTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws JsonProcessingException {
@@ -145,7 +147,7 @@ public class ConsolAppController {
 
 
 
-        long priorityNew = tasksRepository.count() + 1;
+        long priorityNew;// = tasksRepository.count() + 1;
         if (Objects.equals(status, Status.OPEN)) {
             existingTask.setStatus(CLOSED);
             existingTask.setPriorityNew((long) 1);
