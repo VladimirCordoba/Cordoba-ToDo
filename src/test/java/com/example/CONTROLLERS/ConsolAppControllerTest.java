@@ -18,10 +18,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.mockito.Mockito.when;
 
+// import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.ArrangedList.maxPriorityNewMethods;
@@ -30,9 +33,8 @@ import static com.example.Status.CLOSED;
 import static com.example.Status.OPEN;
 //import static jdk.jfr.internal.util.Matcher.match;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.*;
+//import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
@@ -49,6 +51,8 @@ public class ConsolAppControllerTest {
 /*@InjectMocks
 ConsolAppController consolAppController = new ConsolAppController();*/
 
+ //   ArrangedList mockArrangeList = Mockito.mock(ArrangedList.class);
+
 @Autowired
 private ObjectMapper objectMapper;
 //ObjectMapper objectMapper = new ObjectMapper();
@@ -58,6 +62,8 @@ private MockMvc  sut;
 
 @MockBean
   TasksRepository tasksRepositoryMoc;
+//@MockBean
+//ArrangedList arrangedList;
 
 @Test
    public void statusTasksReactJson() throws Exception {
@@ -82,25 +88,35 @@ private MockMvc  sut;
 
     }
 
-/*
 
    @Test
   public  void addTasksReactJson() throws Exception {
+
+
         Optional<Task> existingTask = Optional.of( new Task(4053L,OPEN,"tasktext", HIGH, 47L));
         String input = objectMapper.writeValueAsString(existingTask.get());
-       Mockito.when(tasksRepositoryMoc.findById(Mockito.any())).thenReturn(existingTask);
-       Mockito.when(ArrangedList.maxPriorityNewMethods(tasksRepositoryMoc)).thenReturn(existingTask.get().getPriorityNew());
-     //  Mockito.doNothing().when(maxPriorityNewMethods(tasksRepositoryMoc));
+
+      // Mockito.when(tasksRepositoryMoc.findAll()).thenReturn(existingTask.get());
+       Mockito.when(tasksRepositoryMoc.findAll()).thenReturn(existingTask.stream().toList());
+      // doReturn(existingTask.get()).when(tasksRepositoryMoc.findAll());
+     //  doReturn(tasksRepositoryMoc.findAll());
+
+
+
 
         sut.perform(post("/react/addtask")
-
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(input));
-        Assertions.assertEquals(existingTask.get().getId(), 4053L);
-      Assertions.assertEquals(existingTask.get().getPriorityNew(), 48L);
-    }
-*/
+                .content(input))
+       .andExpect(jsonPath("$.priorityNew").value(48));
 
+      //  Assertions.assertEquals(existingTask.get().getId(), 4053L);
+      // Assertions.assertEquals(existingTask.get().getPriorityNew(), 48);
+      // Assertions.assertEquals(48, existingTask.get().getPriorityNew());
+     //  Assertions.assertEquals(48, maxPriorityNewMethods(tasksRepositoryMoc)+1);
+
+
+
+    }
 
 
 }
