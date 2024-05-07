@@ -19,7 +19,7 @@ public class ArrangedList {
     }
 
 
-    public static Long  maxPriorityNewMethods(TasksRepository tasksRepository) throws Exception {
+    public static long  maxPriorityNewMethods(TasksRepository tasksRepository) throws Exception {
 
         ArrayList<Task> list = arrange(tasksRepository);
         if(list.isEmpty()){

@@ -8,6 +8,8 @@ import com.example.models.Task;
 import com.example.repo.TasksRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,22 +85,21 @@ public class ConsolAppController {
         tasksRepository.save(task1);
     }
 
-    //-------------------->  новый контроллер для обработки React запроса на добавление таск <-------------------------
+    //-------------------->  новый контроллер для обработки React запроса на ДОБАВЛЕНИЕ таск <-------------------------
 
 
     @PostMapping(value = "react/addtask")
-    public void addTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws Exception {
+    public ResponseEntity<Task> addTasksReactJson(@RequestBody Task jsonTaskObject, Model model) throws Exception {
 
-      //  Task newTask = jsonTaskObject;
-     //   String task = newTask.getTask();
         String task = jsonTaskObject.getTask();
 
-        Long priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
+        long priorityNew = ArrangedList.maxPriorityNewMethods(tasksRepository) + 1;
 
-       // Task tasks = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
        Task existingTask = new Task(Status.OPEN, task, Priority.HIGH, priorityNew);
-      //  tasksRepository.save(tasks);
+
         tasksRepository.save(existingTask);
+
+        return new ResponseEntity<>(existingTask, HttpStatus.OK);
     }
 
     //---------------------------> создадим новый контроллер для обработки React запроса на удаление таск <------------------------------
